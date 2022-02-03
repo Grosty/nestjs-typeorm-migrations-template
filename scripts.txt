@@ -1,0 +1,5 @@
+EN:
+"typeorm": "cross-env NODE_ENV=development node --require ts-node/register ./node_modules/typeorm/cli.js"
+
+RU:
+"typeorm": "cross-env NODE_ENV=development ts-node tsconfig-paths/register ./node_modules/typeorm/cli.js --config=src/ormconfig.ts"
