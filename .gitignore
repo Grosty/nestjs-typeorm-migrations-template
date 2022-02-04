@@ -1,7 +1,8 @@
 .env
 .env.*
 *.env
-scripts
+scripts.txt
+*.sqlite
 
 # compiled output
 /dist
