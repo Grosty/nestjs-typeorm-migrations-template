@@ -4,6 +4,8 @@
 scripts.txt
 *.sqlite
 
+# package-lock.json
+
 # compiled output
 /dist
 /node_modules
