@@ -31,6 +31,9 @@ switch (process.env.NODE_ENV) {
       cli: {
         migrationsDir: 'src/migrations',
       },
+      // ssl: {
+      //   rejectUnauthorized: false,
+      // },
     };
     break;
   case 'test':
