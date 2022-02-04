@@ -4,7 +4,7 @@
 scripts.txt
 *.sqlite
 
-# package-lock.json
+package-lock.json
 
 # compiled output
 /dist
