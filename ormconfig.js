@@ -1,43 +1,69 @@
-const ormconfig = {
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { join } = require('path');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config({
+  path: join(__dirname, '.env.' + process.env.NODE_ENV),
+});
+
+let ormconfig = {
   synchronize: false,
-  // migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
-  migrations: [__dirname + '/migrations/**/*.js'],
+  migrations: ['migrations/**/*.js'],
   cli: {
-    // migrationsDir: 'src/migrations',
-    migrationsDir: './migrations',
+    migrationsDir: 'migrations',
   },
 };
 
 switch (process.env.NODE_ENV) {
   case 'development':
     Object.assign(ormconfig, {
-      type: 'sqlite',
-      database: 'db.sqlite',
-      entities: [__dirname + '/**/*.entity.js'],
+      type: 'postgres',
+      host: process.env.POSTGRES_HOST,
+      port: parseInt(process.env.POSTGRES_PORT),
+      username: process.env.POSTGRES_USER,
+      password: process.env.POSTGRES_PASSWORD,
+      database: process.env.POSTGRES_DB,
+      migrationsRun: process.env.RUN_MIGRATIONS === 'true',
+      entities: ['**/*.entity.js'],
     });
+
     break;
   case 'production':
+    // Object.assign(ormconfig, {
+    //   type: 'postgres',
+    //   host: process.env.POSTGRES_HOST,
+    //   port: parseInt(process.env.POSTGRES_PORT),
+    //   username: process.env.POSTGRES_USER,
+    //   password: process.env.POSTGRES_PASSWORD,
+    //   database: process.env.POSTGRES_DB,
+    //   migrationsRun: process.env.RUN_MIGRATIONS === 'true',
+    //   synchronize: false,
+    //   entities: ['**/*.entity.js'],
+    //   ssl: {
+    //     rejectUnauthorized: false,
+    //   },
+    // });
     Object.assign(ormconfig, {
-      type: 'postgres',
-      host: '127.0.0.1',
-      port: 5432,
-      username: 'admin',
-      password: 'admin',
-      database: 'dev_database_migrations',
+      type: 'sqlite',
+      database: 'prod.sqlite',
+      entities: ['**/*.entity.js'],
+      migrationsRun: process.env.RUN_MIGRATIONS === 'true',
     });
     break;
   case 'test':
     Object.assign(ormconfig, {
       type: 'sqlite',
       database: 'test.sqlite',
-      entities: ['src/**/*.entity.ts'],
+      entities: ['**/*.entity.ts'],
+      migrationsRun: true,
     });
     break;
   case 'provision':
-    Object.assign(ormconfig, {});
+    throw new Error('provision environment not set');
     break;
   default:
     throw new Error('Unknown environment');
 }
+
+console.log(ormconfig);
 
 module.exports = ormconfig;

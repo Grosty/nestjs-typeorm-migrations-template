@@ -5,7 +5,6 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as Joi from 'joi';
 import { UsersModule } from './modules/users/users.module';
-import ormconfig from './ormconfig';
 
 @Module({
   imports: [
@@ -15,17 +14,17 @@ import ormconfig from './ormconfig';
           .valid('development', 'production', 'test', 'provision')
           .default('development'),
         PORT: Joi.number().default(3000),
-        POSTGRES_HOST: Joi.string().default('127.0.0.1'),
+        POSTGRES_HOST: Joi.string().default('localhost'),
         POSTGRES_PORT: Joi.number().default(5432),
-        POSTGRES_USER: Joi.string().default('postgres'),
-        POSTGRES_PASSWORD: Joi.string().default('yourSecretPassword'),
-        POSTGRES_DB: Joi.string().default('database_name'),
+        POSTGRES_USER: Joi.string().default('admin'),
+        POSTGRES_PASSWORD: Joi.string().default('admin'),
+        POSTGRES_DB: Joi.string().default('development_db'),
         RUN_MIGRATIONS: Joi.boolean().default(true),
       }),
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV}`,
     }),
-    TypeOrmModule.forRoot(ormconfig),
+    TypeOrmModule.forRoot(),
     UsersModule,
   ],
   controllers: [AppController],
